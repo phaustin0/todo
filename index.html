@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Todo">
+<title>Todo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="app">
+  <header class="app-header">
+    <h1 class="app-title">Todo</h1>
+  </header>
+
+  <form class="new-task-row" id="new-task-form" autocomplete="off">
+    <input
+      type="text"
+      id="new-task-input"
+      class="new-task-input"
+      placeholder="Add a task…"
+      maxlength="500"
+    >
+    <button type="submit" class="btn btn-primary" id="add-btn">Add</button>
+  </form>
+
+  <ul class="task-list" id="task-list"></ul>
+
+  <p class="empty-state" id="empty-state" hidden>No tasks yet. Add one above.</p>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

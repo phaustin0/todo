@@ -1,0 +1,316 @@
+/* Todo — visual design derived from DESIGN.md (Raycast-design-analysis) */
+
+:root {
+  /* Colors */
+  --primary: #ffffff;
+  --primary-pressed: #e8e8e8;
+  --on-primary: #000000;
+  --ink: #f4f4f6;
+  --body-text: #cdcdcd;
+  --mute: #9c9c9d;
+  --ash: #6a6b6c;
+  --stone: #434345;
+  --on-dark: #ffffff;
+  --on-dark-mute: rgba(255, 255, 255, 0.72);
+  --canvas: #07080a;
+  --surface: #0d0d0d;
+  --surface-elevated: #101111;
+  --surface-card: #121212;
+  --hairline: #242728;
+  --hairline-soft: rgba(255, 255, 255, 0.08);
+  --hairline-strong: rgba(255, 255, 255, 0.16);
+  --accent-red: #ff6161;
+
+  /* Typography */
+  --font-family: "Inter", "Inter Fallback", system-ui, -apple-system, sans-serif;
+
+  /* Radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-full: 9999px;
+
+  /* Spacing */
+  --sp-xxs: 2px;
+  --sp-xs: 4px;
+  --sp-sm: 8px;
+  --sp-md: 12px;
+  --sp-lg: 16px;
+  --sp-xl: 24px;
+  --sp-xxl: 32px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--body-text);
+  font-family: var(--font-family);
+  font-feature-settings: "calt", "kern", "liga", "ss03";
+  -webkit-font-smoothing: antialiased;
+  min-width: 320px;
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: var(--sp-xxl) var(--sp-xl) var(--sp-xl);
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  margin-bottom: var(--sp-xl);
+}
+
+.app-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.2px;
+  color: var(--ink);
+}
+
+/* New task row */
+.new-task-row {
+  display: flex;
+  gap: var(--sp-sm);
+  margin-bottom: var(--sp-xl);
+}
+
+.new-task-input {
+  flex: 1;
+  background: var(--surface-elevated);
+  color: var(--on-dark);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  height: 36px;
+  font-family: var(--font-family);
+  font-feature-settings: "calt", "kern", "liga", "ss03";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  outline: none;
+  transition: border-color 0.12s ease;
+}
+
+.new-task-input::placeholder {
+  color: var(--ash);
+}
+
+.new-task-input:focus {
+  border-color: var(--hairline-strong);
+}
+
+.btn {
+  font-family: var(--font-family);
+  font-feature-settings: "calt", "kern", "liga", "ss03";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.2px;
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+  height: 36px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.btn-primary:hover {
+  background: var(--primary-pressed);
+}
+
+.btn-primary:active {
+  background: var(--primary-pressed);
+}
+
+/* Task list */
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  padding: 8px var(--sp-md);
+  min-height: 44px;
+}
+
+.task-row.dragging {
+  opacity: 0.5;
+}
+
+.task-row.drag-over-top {
+  border-top: 2px solid var(--on-dark);
+}
+
+.task-row.drag-over-bottom {
+  border-bottom: 2px solid var(--on-dark);
+}
+
+/* Drag handle */
+.drag-handle {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--stone);
+  cursor: grab;
+  border-radius: var(--radius-xs);
+  user-select: none;
+  touch-action: none;
+}
+
+.drag-handle:hover {
+  color: var(--mute);
+  background: var(--surface-elevated);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.drag-handle svg {
+  pointer-events: none;
+}
+
+/* Checkbox */
+.task-checkbox {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--hairline-strong);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.task-checkbox:hover {
+  border-color: var(--on-dark);
+}
+
+.task-checkbox:checked {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.task-checkbox:checked::after {
+  content: "";
+  width: 6px;
+  height: 10px;
+  border-right: 2px solid var(--on-primary);
+  border-bottom: 2px solid var(--on-primary);
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+/* Task text / editing */
+.task-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--on-dark);
+  cursor: text;
+  padding: 4px 0;
+  overflow-wrap: anywhere;
+}
+
+.task-row.completed .task-text {
+  text-decoration: line-through;
+  color: var(--mute);
+}
+
+.task-edit-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  color: var(--on-dark);
+  border: none;
+  border-bottom: 1px solid var(--hairline-strong);
+  outline: none;
+  font-family: var(--font-family);
+  font-feature-settings: "calt", "kern", "liga", "ss03";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  padding: 4px 0;
+}
+
+/* Delete control */
+.delete-btn {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--ash);
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  color: var(--accent-red);
+  background: var(--surface-elevated);
+}
+
+.delete-btn svg {
+  pointer-events: none;
+}
+
+/* Empty state */
+.empty-state {
+  color: var(--ash);
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+  margin-top: var(--sp-xxl);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .app {
+    padding: var(--sp-xl) var(--sp-lg) var(--sp-lg);
+  }
+
+  .app-title {
+    font-size: 20px;
+  }
+}
